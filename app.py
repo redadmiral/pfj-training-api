@@ -16,28 +16,25 @@ async def redirect():
 
 
 @app.get("/get_html", response_class=HTMLResponse)
-async def html_example_get_endpoint(number: int):
-    html_code = f"<h1>Result</h1> <p> Twice the input is {number*2}</p>"
+async def html_example_get_endpoint(number: int, multiplier: int):
+    html_code = f"<h1>Result</h1> <p> {multiplier} times {number} is {number*multiplier}</p>"
     return html_code
 
 @app.get("/get_json")
-async def json_example_get_endpoint(number: int):
-    return {"result": number*2}
+async def json_example_get_endpoint(number: int, multiplier: int):
+    return {"result": number*multiplier}
 
 class post_input(BaseModel):
     number: int
-    multiplicator: int
-    possible_results: List[int]
+    multiplier: int
 
 class post_response(BaseModel):
     result: int
-    in_results: bool
 
 @app.post("/post_json")
 async def json_example_post_endpoint(postinput: post_input) -> post_response:
     response = post_response(
-        result = postinput.number*2,
-        in_results = postinput.number*2 in postinput.possible_results
+        result = postinput.number*postinput.multiplier,
     )
     return response
 
